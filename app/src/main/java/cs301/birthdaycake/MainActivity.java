@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
         // Checkpoint 2
         Button myButton = findViewById(R.id.button1);
         myButton.setOnClickListener(cakeController);
+
+        // Checkpoint 3
+        Switch mySwitch = findViewById(R.id.Switch2);
+        mySwitch.setOnCheckedChangeListener(cakeController);
     }
     public void goodbye(View button)
     {
