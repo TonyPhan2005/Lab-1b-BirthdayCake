@@ -76,16 +76,23 @@ public class CakeView extends SurfaceView {
      * the position of the bottom left corner of the candle
      */
     public void drawCandle(Canvas canvas, float left, float bottom) {
+
         canvas.drawRect(left, bottom - candleHeight, left + candleWidth, bottom, candlePaint);
 
         //draw the outer flame
         float flameCenterX = left + candleWidth/2;
         float flameCenterY = bottom - wickHeight - candleHeight - outerFlameRadius/3;
-        canvas.drawCircle(flameCenterX, flameCenterY, outerFlameRadius, outerFlamePaint);
 
         //draw the inner flame
         flameCenterY += outerFlameRadius/3;
-        canvas.drawCircle(flameCenterX, flameCenterY, innerFlameRadius, innerFlamePaint);
+
+        // Checkpoint 2
+        if (cakeModel.candlesLit)
+        {
+            canvas.drawCircle(flameCenterX, flameCenterY, outerFlameRadius, outerFlamePaint);
+            canvas.drawCircle(flameCenterX, flameCenterY, innerFlameRadius, innerFlamePaint);
+        }
+
 
         //draw the wick
         float wickLeft = left + candleWidth/2 - wickWidth/2;
@@ -126,8 +133,10 @@ public class CakeView extends SurfaceView {
         //Then a second cake layer
         canvas.drawRect(cakeLeft, top, cakeLeft + cakeWidth, bottom, cakePaint);
 
-        //Now a candle in the center
-        drawCandle(canvas, cakeLeft + cakeWidth/2 - candleWidth/2, cakeTop);
+        // Left Candle
+        drawCandle(canvas, cakeLeft + cakeWidth/2 - candleWidth/2 - 125, cakeTop);
+        // Right Candle
+        drawCandle(canvas, cakeLeft + cakeWidth/2 - candleWidth/2 + 125, cakeTop);
 
     }//onDraw
 
