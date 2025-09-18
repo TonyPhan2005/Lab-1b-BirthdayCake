@@ -136,11 +136,15 @@ public class CakeView extends SurfaceView {
         // Checkpoint 3
         if (cakeModel.candlesOrNot)
         {
-            // Left Candle
-            drawCandle(canvas, cakeLeft + cakeWidth/2 - candleWidth/2 - 125, cakeTop);
-            // Right Candle
-            drawCandle(canvas, cakeLeft + cakeWidth/2 - candleWidth/2 + 125, cakeTop);
+            float spacing = cakeWidth / (cakeModel.candlesAmount + 1);
+
+            for (int c = 0; c < cakeModel.candlesAmount; c++)
+            {
+                float x = cakeLeft + (c+1) * spacing;
+                drawCandle(canvas, x - candleWidth/2, cakeTop);
+            }
         }
+
 
     }//onDraw
 

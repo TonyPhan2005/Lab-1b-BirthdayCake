@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.Switch;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
         // Checkpoint 3
         Switch mySwitch = findViewById(R.id.Switch2);
         mySwitch.setOnCheckedChangeListener(cakeController);
+
+        // Checkpoint 4
+        SeekBar mySeekBar = findViewById(R.id.seekBar);
+        mySeekBar.setOnSeekBarChangeListener(cakeController);
     }
     public void goodbye(View button)
     {
