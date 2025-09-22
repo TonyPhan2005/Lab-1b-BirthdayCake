@@ -133,13 +133,14 @@ public class CakeView extends SurfaceView {
         //Then a second cake layer
         canvas.drawRect(cakeLeft, top, cakeLeft + cakeWidth, bottom, cakePaint);
 
-        // Checkpoint 3
-        if (cakeModel.candlesOrNot)
+        // Checkpoint 3-4
+        if (cakeModel.candlesOrNot) // Only works if there's candles (>0)
         {
             float spacing = cakeWidth / (cakeModel.candlesAmount + 1);
 
             for (int c = 0; c < cakeModel.candlesAmount; c++)
             {
+                // Goes left to right (making candles)
                 float x = cakeLeft + (c+1) * spacing;
                 drawCandle(canvas, x - candleWidth/2, cakeTop);
             }
