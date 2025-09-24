@@ -34,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
         SeekBar mySeekBar = findViewById(R.id.seekBar);
         mySeekBar.setOnSeekBarChangeListener(cakeController);
 
-        //team lab
+        // Add On touch event
         cakeView.setOnTouchListener(cakeController);
+
     }
     public void goodbye(View button)
     {

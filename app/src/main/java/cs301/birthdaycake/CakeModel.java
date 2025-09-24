@@ -9,5 +9,10 @@ public class CakeModel {
 
     public float balloonX = -1;
     public float balloonY;
+
+    public float checkerX = -1f;
+
+    public float checkerY = -1f;
+
 }
 
