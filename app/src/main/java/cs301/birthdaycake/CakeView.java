@@ -5,149 +5,120 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.view.SurfaceView;
+import android.view.View;
 
-public class CakeView extends SurfaceView {
+public class CakeView extends View {
 
-    /* These are the paints we'll use to draw the birthday cake below */
-    Paint cakePaint = new Paint();
-    Paint frostingPaint = new Paint();
-    Paint candlePaint = new Paint();
-    Paint outerFlamePaint = new Paint();
-    Paint innerFlamePaint = new Paint();
-    Paint wickPaint = new Paint();
+    private CakeModel cakeModel;
 
-    /* These constants define the dimensions of the cake.  While defining constants for things
-        like this is good practice, we could be calculating these better by detecting
-        and adapting to different tablets' screen sizes and resolutions.  I've deliberately
-        stuck with hard-coded values here to ease the introduction for CS371 students.
-     */
+    private Paint cakePaint, frostingPaint, candlePaint, outerFlamePaint, innerFlamePaint, wickPaint, textPaint;
+
+    /* Cake dimensions */
     public static final float cakeTop = 400.0f;
     public static final float cakeLeft = 100.0f;
     public static final float cakeWidth = 1200.0f;
     public static final float layerHeight = 200.0f;
     public static final float frostHeight = 50.0f;
     public static final float candleHeight = 300.0f;
-    public static final float candleWidth = 65.0f; //changed to 60 for lab
+    public static final float candleWidth = 65.0f;
     public static final float wickHeight = 30.0f;
     public static final float wickWidth = 6.0f;
     public static final float outerFlameRadius = 30.0f;
     public static final float innerFlameRadius = 15.0f;
 
-
-    private CakeModel cakeModel; // Instance variable: Type CakeModel
-
-    /**
-     * ctor must be overridden here as per standard Java inheritance practice.  We need it
-     * anyway to initialize the member variables
-     */
     public CakeView(Context context, AttributeSet attrs) {
         super(context, attrs);
         cakeModel = new CakeModel();
 
-        //This is essential or your onDraw method won't get called
-        setWillNotDraw(false);
-
-        //Setup our palette
-        cakePaint.setColor(Color.BLACK);  //violet-red
+        // Paints
+        cakePaint = new Paint();
+        cakePaint.setColor(Color.BLACK);
         cakePaint.setStyle(Paint.Style.FILL);
-        frostingPaint.setColor(0xFFFFFACD);  //pale yellow
+
+        frostingPaint = new Paint();
+        frostingPaint.setColor(0xFFFFFACD);
         frostingPaint.setStyle(Paint.Style.FILL);
-        candlePaint.setColor(0xFF32CD32);  //lime green
+
+        candlePaint = new Paint();
+        candlePaint.setColor(0xFF32CD32);
         candlePaint.setStyle(Paint.Style.FILL);
-        outerFlamePaint.setColor(0xFFFFD700);  //gold yellow
+
+        outerFlamePaint = new Paint();
+        outerFlamePaint.setColor(0xFFFFD700);
         outerFlamePaint.setStyle(Paint.Style.FILL);
-        innerFlamePaint.setColor(0xFFFFA500);  //orange
+
+        innerFlamePaint = new Paint();
+        innerFlamePaint.setColor(0xFFFFA500);
         innerFlamePaint.setStyle(Paint.Style.FILL);
+
+        wickPaint = new Paint();
         wickPaint.setColor(Color.BLACK);
         wickPaint.setStyle(Paint.Style.FILL);
 
-        setBackgroundColor(Color.WHITE);  //better than black default
+        textPaint = new Paint();
+        textPaint.setColor(Color.RED);
+        textPaint.setTextSize(60);
+        textPaint.setTextAlign(Paint.Align.RIGHT);
 
+        setBackgroundColor(Color.WHITE);
     }
 
-    public CakeModel getCakeModel() // Getter Method: Cake Model
-    {
-        return this.cakeModel;
+    public CakeModel getCakeModel() {
+        return cakeModel;
     }
 
-    /**
-     * draws a candle at a specified position.  Important:  the left, bottom coordinates specify
-     * the position of the bottom left corner of the candle
-     */
-    public void drawCandle(Canvas canvas, float left, float bottom) {
-
+    private void drawCandle(Canvas canvas, float left, float bottom) {
         canvas.drawRect(left, bottom - candleHeight, left + candleWidth, bottom, candlePaint);
 
-        //draw the outer flame
-        float flameCenterX = left + candleWidth/2;
-        float flameCenterY = bottom - wickHeight - candleHeight - outerFlameRadius/3;
+        float flameX = left + candleWidth / 2;
+        float flameY = bottom - wickHeight - candleHeight - outerFlameRadius / 3 + outerFlameRadius / 3;
 
-        //draw the inner flame
-        flameCenterY += outerFlameRadius/3;
-
-        // Checkpoint 2
-        if (cakeModel.candlesLit)
-        {
-            canvas.drawCircle(flameCenterX, flameCenterY, outerFlameRadius, outerFlamePaint);
-            canvas.drawCircle(flameCenterX, flameCenterY, innerFlameRadius, innerFlamePaint);
+        if (cakeModel.candlesLit) {
+            canvas.drawCircle(flameX, flameY, outerFlameRadius, outerFlamePaint);
+            canvas.drawCircle(flameX, flameY, innerFlameRadius, innerFlamePaint);
         }
 
-
-        //draw the wick
-        float wickLeft = left + candleWidth/2 - wickWidth/2;
+        float wickLeft = left + candleWidth / 2 - wickWidth / 2;
         float wickTop = bottom - wickHeight - candleHeight;
         canvas.drawRect(wickLeft, wickTop, wickLeft + wickWidth, wickTop + wickHeight, wickPaint);
-
     }
 
-    /**
-     * onDraw is like "paint" in a regular Java program.  While a Canvas is
-     * conceptually similar to a Graphics in javax.swing, the implementation has
-     * many subtle differences.  Show care and read the documentation.
-     *
-     * This method will draw a birthday cake
-     */
     @Override
-    public void onDraw(Canvas canvas)
-    {
-        //top and bottom are used to keep a running tally as we progress down the cake layers
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
         float top = cakeTop;
         float bottom = cakeTop + frostHeight;
 
-        //Frosting on top
+        // Frosting and cake layers
         canvas.drawRect(cakeLeft, top, cakeLeft + cakeWidth, bottom, frostingPaint);
         top += frostHeight;
         bottom += layerHeight;
-
-        //Then a cake layer
         canvas.drawRect(cakeLeft, top, cakeLeft + cakeWidth, bottom, cakePaint);
         top += layerHeight;
         bottom += frostHeight;
-
-        //Then a second frosting layer
         canvas.drawRect(cakeLeft, top, cakeLeft + cakeWidth, bottom, frostingPaint);
         top += frostHeight;
         bottom += layerHeight;
-
-        //Then a second cake layer
         canvas.drawRect(cakeLeft, top, cakeLeft + cakeWidth, bottom, cakePaint);
 
-        // Checkpoint 3-4
-        if (cakeModel.candlesOrNot) // Only works if there's candles (>0)
-        {
+        // Draw candles
+        if (cakeModel.candlesOrNot) {
             float spacing = cakeWidth / (cakeModel.candlesAmount + 1);
-
-            for (int c = 0; c < cakeModel.candlesAmount; c++)
-            {
-                // Goes left to right (making candles)
-                float x = cakeLeft + (c+1) * spacing;
-                drawCandle(canvas, x - candleWidth/2, cakeTop);
+            for (int i = 0; i < cakeModel.candlesAmount; i++) {
+                float x = cakeLeft + (i + 1) * spacing;
+                drawCandle(canvas, x - candleWidth / 2, cakeTop);
             }
         }
 
-
-    }//onDraw
-
-}//class CakeView
-
+        // Draw touch coordinates
+        if (cakeModel.touchX >= 0 && cakeModel.touchY >= 0) {
+            canvas.drawText(
+                    "Touch: (" + (int) cakeModel.touchX + ", " + (int) cakeModel.touchY + ")",
+                    getWidth() - 20,
+                    getHeight() - 20 - textPaint.getTextSize(),
+                    textPaint
+            );
+        }
+    }
+}
