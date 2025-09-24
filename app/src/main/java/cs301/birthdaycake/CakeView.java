@@ -16,6 +16,7 @@ public class CakeView extends SurfaceView {
     Paint outerFlamePaint = new Paint();
     Paint innerFlamePaint = new Paint();
     Paint wickPaint = new Paint();
+    Paint balloonPaint = new Paint();
 
     /* These constants define the dimensions of the cake.  While defining constants for things
         like this is good practice, we could be calculating these better by detecting
@@ -61,6 +62,8 @@ public class CakeView extends SurfaceView {
         innerFlamePaint.setStyle(Paint.Style.FILL);
         wickPaint.setColor(Color.BLACK);
         wickPaint.setStyle(Paint.Style.FILL);
+        balloonPaint.setARGB(255,66, 135, 245); //light blue
+        balloonPaint.setStyle(Paint.Style.FILL);
 
         setBackgroundColor(Color.WHITE);  //better than black default
 
@@ -69,6 +72,17 @@ public class CakeView extends SurfaceView {
     public CakeModel getCakeModel() // Getter Method: Cake Model
     {
         return this.cakeModel;
+    }
+
+    /**
+     * draws a balloon centered at the given coordinates
+     */
+    public void drawBalloon(Canvas canvas, float x, float y)
+    {
+        canvas.drawCircle(x,y,100, balloonPaint);
+        canvas.drawCircle(x-40, y-40, 10, frostingPaint);
+        //canvas.drawArc(x-100,y-100,x-80,y-110, );
+        canvas.drawRect(x+50, y+50, x+55, y+255, wickPaint);
     }
 
     /**
@@ -111,6 +125,12 @@ public class CakeView extends SurfaceView {
     @Override
     public void onDraw(Canvas canvas)
     {
+        //draw balloon where last touched
+        if(cakeModel.balloonX >= 0) {
+            drawBalloon(canvas, cakeModel.balloonX, cakeModel.balloonY);
+        }
+
+
         //top and bottom are used to keep a running tally as we progress down the cake layers
         float top = cakeTop;
         float bottom = cakeTop + frostHeight;

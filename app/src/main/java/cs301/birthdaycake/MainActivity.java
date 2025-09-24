@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         // Checkpoint 4
         SeekBar mySeekBar = findViewById(R.id.seekBar);
         mySeekBar.setOnSeekBarChangeListener(cakeController);
+
+        //team lab
+        cakeView.setOnTouchListener(cakeController);
     }
     public void goodbye(View button)
     {
