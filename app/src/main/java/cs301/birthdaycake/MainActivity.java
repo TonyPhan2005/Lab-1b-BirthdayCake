@@ -18,21 +18,21 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_main);
 
-        // Checkpoint 1
         CakeView cakeView = findViewById(R.id.cakeView);
         CakeController cakeController = new CakeController(cakeView);
 
-        // Checkpoint 2
         Button myButton = findViewById(R.id.button1);
         myButton.setOnClickListener(cakeController);
 
-        // Checkpoint 3
         Switch mySwitch = findViewById(R.id.Switch2);
         mySwitch.setOnCheckedChangeListener(cakeController);
 
-        // Checkpoint 4
         SeekBar mySeekBar = findViewById(R.id.seekBar);
         mySeekBar.setOnSeekBarChangeListener(cakeController);
+
+        // Add On touch event
+        cakeView.setOnTouchListener(cakeController);
+
     }
     public void goodbye(View button)
     {

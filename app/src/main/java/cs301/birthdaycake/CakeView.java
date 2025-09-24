@@ -17,6 +17,9 @@ public class CakeView extends SurfaceView {
     Paint innerFlamePaint = new Paint();
     Paint wickPaint = new Paint();
 
+    Paint redPaint = new Paint();
+    Paint greenPaint = new Paint();
+
     /* These constants define the dimensions of the cake.  While defining constants for things
         like this is good practice, we could be calculating these better by detecting
         and adapting to different tablets' screen sizes and resolutions.  I've deliberately
@@ -33,7 +36,6 @@ public class CakeView extends SurfaceView {
     public static final float wickWidth = 6.0f;
     public static final float outerFlameRadius = 30.0f;
     public static final float innerFlameRadius = 15.0f;
-
 
     private CakeModel cakeModel; // Instance variable: Type CakeModel
 
@@ -62,6 +64,12 @@ public class CakeView extends SurfaceView {
         wickPaint.setColor(Color.BLACK);
         wickPaint.setStyle(Paint.Style.FILL);
 
+        redPaint.setColor(Color.RED);
+        redPaint.setStyle(Paint.Style.FILL);
+
+        greenPaint.setColor(Color.GREEN);
+        greenPaint.setStyle(Paint.Style.FILL);
+
         setBackgroundColor(Color.WHITE);  //better than black default
 
     }
@@ -80,24 +88,40 @@ public class CakeView extends SurfaceView {
         canvas.drawRect(left, bottom - candleHeight, left + candleWidth, bottom, candlePaint);
 
         //draw the outer flame
-        float flameCenterX = left + candleWidth/2;
-        float flameCenterY = bottom - wickHeight - candleHeight - outerFlameRadius/3;
+        float flameCenterX = left + candleWidth / 2;
+        float flameCenterY = bottom - wickHeight - candleHeight - outerFlameRadius / 3;
 
         //draw the inner flame
-        flameCenterY += outerFlameRadius/3;
+        flameCenterY += outerFlameRadius / 3;
 
         // Checkpoint 2
-        if (cakeModel.candlesLit)
-        {
+        if (cakeModel.candlesLit) {
             canvas.drawCircle(flameCenterX, flameCenterY, outerFlameRadius, outerFlamePaint);
             canvas.drawCircle(flameCenterX, flameCenterY, innerFlameRadius, innerFlamePaint);
         }
 
-
         //draw the wick
-        float wickLeft = left + candleWidth/2 - wickWidth/2;
+        float wickLeft = left + candleWidth / 2 - wickWidth / 2;
         float wickTop = bottom - wickHeight - candleHeight;
         canvas.drawRect(wickLeft, wickTop, wickLeft + wickWidth, wickTop + wickHeight, wickPaint);
+
+    }
+
+    public void drawCheckerboard(Canvas canvas, float x, float y) {
+
+        // Draw checkerboard
+
+        // Bottom Right
+        canvas.drawRect(x, y, x + 100, y + 100, greenPaint);
+
+        // Bottom Left
+        canvas.drawRect(x, y, x - 100, y + 100, redPaint);
+
+        // Top Left
+        canvas.drawRect(x, y, x - 100, y-100, greenPaint);
+
+        // Top Right
+        canvas.drawRect(x, y, x + 100, y-100, redPaint);
 
     }
 
@@ -105,12 +129,11 @@ public class CakeView extends SurfaceView {
      * onDraw is like "paint" in a regular Java program.  While a Canvas is
      * conceptually similar to a Graphics in javax.swing, the implementation has
      * many subtle differences.  Show care and read the documentation.
-     *
+     * <p>
      * This method will draw a birthday cake
      */
     @Override
-    public void onDraw(Canvas canvas)
-    {
+    public void onDraw(Canvas canvas) {
         //top and bottom are used to keep a running tally as we progress down the cake layers
         float top = cakeTop;
         float bottom = cakeTop + frostHeight;
@@ -138,16 +161,18 @@ public class CakeView extends SurfaceView {
         {
             float spacing = cakeWidth / (cakeModel.candlesAmount + 1);
 
-            for (int c = 0; c < cakeModel.candlesAmount; c++)
-            {
+            for (int c = 0; c < cakeModel.candlesAmount; c++) {
                 // Goes left to right (making candles)
-                float x = cakeLeft + (c+1) * spacing;
-                drawCandle(canvas, x - candleWidth/2, cakeTop);
+                float x = cakeLeft + (c + 1) * spacing;
+                drawCandle(canvas, x - candleWidth / 2, cakeTop);
             }
         }
 
+        // If "touch", then draws
+        if(cakeModel.checkerX >= 0)
+        {
+            drawCheckerboard(canvas, cakeModel.checkerX, cakeModel.checkerY);
+        }
 
-    }//onDraw
-
-}//class CakeView
-
+    } // onDraw
+}
